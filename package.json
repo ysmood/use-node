@@ -1,0 +1,22 @@
+{
+  "name": "use-node",
+  "version": "1.0.0",
+  "engines": {
+    "node": ">=v19.1.0"
+  },
+  "description": "No need to setup anything, just run the `use-node`, then you can use the right node version under your shell.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ysmood/use-node.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ysmood/use-node/issues"
+  },
+  "homepage": "https://github.com/ysmood/use-node#readme"
+}

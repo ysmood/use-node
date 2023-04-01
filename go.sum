@@ -1,0 +1,11 @@
+github.com/Masterminds/semver/v3 v3.2.0 h1:3MEsd0SM6jqZojhjLWWeBY+Kcjy9i6MQAeY7YgDP83g=
+github.com/Masterminds/semver/v3 v3.2.0/go.mod h1:qvl/7zhW3nngYb5+80sSMF+FG2BjYrf8m9wsX0PNOMQ=
+github.com/ysmood/fetchup v0.0.4 h1:RfZS2E4iPiN8dbtX8OQ/iTZQxoOlQs3BmOMJJuN19kI=
+github.com/ysmood/fetchup v0.0.4/go.mod h1:b5DtW4kZ7L5UokuXfT4QKEZBCubUQXKcwbX2PMNFzRg=
+github.com/ysmood/gop v0.0.1 h1:EGxcy28xzMfjT+TlLf8JQd1w/sTz0XPrbHazLLs84BA=
+github.com/ysmood/gop v0.0.1/go.mod h1:JenWOSCGucsXYHdw1Cw4a0fmLnux7jXBDdlBGjh8V/g=
+github.com/ysmood/got v0.32.0/go.mod h1:pE1l4LOwOBhQg6A/8IAatkGp7uZjnalzrZolnlhhMgY=
+github.com/ysmood/got v0.33.0 h1:E0XJ5/mI2wdCCjXkqJ2d96GdOEYFwe2ou0FqHJf6zr4=
+github.com/ysmood/got v0.33.0/go.mod h1:P3C/Wwttv4uq/tpovaH+c8ANmHePyFPxEbNzdxcEGDU=
+github.com/ysmood/gson v0.7.3 h1:QFkWbTH8MxyUTKPkVWAENJhxqdBa4lYTQWqZCiLG6kE=
+github.com/ysmood/gson v0.7.3/go.mod h1:3Kzs5zDl21g5F/BlLTNcuAGAYLKt2lV5G8D1zF3RNmg=
