@@ -39,8 +39,8 @@ func TestGetVersion(t *testing.T) {
 func TestGetNode(t *testing.T) {
 	g := got.T(t)
 
-	GetNodePath()
-	p := GetNodePath()
+	GetNodePath("")
+	p := GetNodePath("")
 
 	g.Has(p, "use-node")
 }

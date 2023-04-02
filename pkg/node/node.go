@@ -14,8 +14,14 @@ import (
 
 var cacheDir = filepath.Join(fetchup.CacheDir(), "use-node")
 
-func GetNodePath() string {
-	n := getNodeInfo()
+func GetNodePath(ver string) string {
+	var n Node
+	if ver != "" {
+		n = newNode(ver)
+	} else {
+		n = getNodeInfo()
+	}
+
 	nodePath := filepath.Join(cacheDir, n.Ver.Original())
 
 	if binExist(nodePath) {
@@ -126,10 +132,6 @@ func findPackageJSON() string {
 		p := filepath.Join(d, "package.json")
 		if _, err := os.Stat(p); err == nil {
 			return p
-		}
-
-		if d == "/" {
-			break
 		}
 
 		prev = d
