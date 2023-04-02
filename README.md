@@ -8,6 +8,10 @@ No need to setup anything, just run the `use-node`, then you can use the right n
 - Auto-cache the node binary.
 - Reports every side-effect it makes on the system, such as where the node is installed.
 
+## Installation
+
+Go to the [release page](https://github.com/ysmood/use-node/releases) to download the use-node binary to one of your PATH.
+
 ## How it works
 
 When you run the `use-node`. It first recognize the `engines` field in `package.json` and automatically download or use the best node version from cache.
