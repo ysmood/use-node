@@ -28,4 +28,4 @@ On unix like OS, add this line to your `.bashrc` or `.zshrc` files:
 export PATH=$PATH:$(use-node v19.8.1)
 ```
 
-On Windows, run `use-node v19.8.1`, copy the output then add it the PATH config.
+On Windows, run `use-node v19.8.1`, copy the output then add it the [PATH config](https://www.java.com/en/download/help/path.html).
