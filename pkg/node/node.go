@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 
 	"github.com/Masterminds/semver/v3"
 	"github.com/ysmood/fetchup"
@@ -15,6 +16,8 @@ import (
 var cacheDir = filepath.Join(fetchup.CacheDir(), "use-node")
 
 func GetNodePath(ver string) string {
+	utils.E(os.MkdirAll(cacheDir, 0755))
+
 	var n Node
 	if ver != "" {
 		n = newNode(ver)
@@ -141,8 +144,15 @@ func findPackageJSON() string {
 	return ""
 }
 
+func BinPath(nodePath string) string {
+	binPath := nodePath
+	if runtime.GOOS != "windows" {
+		binPath = filepath.Join(nodePath, "bin")
+	}
+	return binPath
+}
+
 func binExist(p string) bool {
-	bin := filepath.Join(p, "bin", "node")
-	_, err := exec.Command(bin, "-v").CombinedOutput()
+	_, err := exec.Command(BinPath(p), "-v").CombinedOutput()
 	return err == nil
 }

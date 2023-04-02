@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"path/filepath"
 	"strings"
 
 	"github.com/ysmood/use-node/pkg/node"
@@ -39,13 +38,12 @@ func main() {
 	}
 
 	nodePath := node.GetNodePath(ver)
+	binPath := node.BinPath(nodePath)
 
 	if ver != "" {
-		p(filepath.Join(nodePath, "bin"))
+		p(binPath)
 		return
 	}
-
-	binPath := filepath.Join(nodePath, "bin")
 
 	os.Setenv(USE_NODE_SHELL, "true")
 	os.Setenv(PATH, strings.Join([]string{binPath, os.Getenv(PATH)}, string(os.PathListSeparator)))
