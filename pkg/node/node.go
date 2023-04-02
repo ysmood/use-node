@@ -153,6 +153,6 @@ func BinPath(nodePath string) string {
 }
 
 func binExist(p string) bool {
-	_, err := exec.Command(BinPath(p), "-v").CombinedOutput()
+	_, err := exec.Command(filepath.Join(BinPath(p), "node"), "-v").CombinedOutput()
 	return err == nil
 }
