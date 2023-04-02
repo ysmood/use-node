@@ -2,9 +2,10 @@
 
 No need to setup anything, just run the `use-node`, then you can use the right node version under your shell.
 
-- Auto-choose the fastest registry to download node
-- Auto-cache the node binary
-- Auto-detect the standard `engines` config in `package.json`
+- No options, no configs, just run `use-node` under your node project.
+- Auto-detect the standard [engines](https://docs.npmjs.com/cli/v9/configuring-npm/package-json#engines) config recursively.
+- Auto-choose the fastest registry to download node.
+- Auto-cache the node binary.
 
 ## How it works
 

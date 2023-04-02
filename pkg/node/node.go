@@ -1,4 +1,4 @@
-package main
+package node
 
 import (
 	"net/http"
@@ -9,11 +9,12 @@ import (
 	"github.com/Masterminds/semver/v3"
 	"github.com/ysmood/fetchup"
 	"github.com/ysmood/gson"
+	"github.com/ysmood/use-node/pkg/utils"
 )
 
 var cacheDir = filepath.Join(fetchup.CacheDir(), "use-node")
 
-func getNodePath() string {
+func GetNodePath() string {
 	n := getNodeInfo()
 	nodePath := filepath.Join(cacheDir, n.Ver.Original())
 
@@ -25,9 +26,9 @@ func getNodePath() string {
 
 	fu := fetchup.New(nodePath, n.URLs()...)
 
-	E(fu.Fetch())
+	utils.E(fu.Fetch())
 
-	E(fetchup.StripFirstDir(nodePath))
+	utils.E(fetchup.StripFirstDir(nodePath))
 
 	return nodePath
 }
@@ -38,7 +39,7 @@ type Node struct {
 
 func newNode(version string) Node {
 	ver, err := semver.NewVersion(version)
-	E(err)
+	utils.E(err)
 
 	return Node{
 		Ver: ver,
@@ -49,7 +50,7 @@ func getLocalNodeList() []Node {
 	out := []Node{}
 
 	list, err := os.ReadDir(cacheDir)
-	E(err)
+	utils.E(err)
 
 	for _, d := range list {
 		if !d.IsDir() || d.Name()[0] != 'v' {
@@ -64,7 +65,7 @@ func getLocalNodeList() []Node {
 
 func getRemoteNodeList() []Node {
 	res, err := http.Get("https://nodejs.org/dist/index.json")
-	E(err)
+	utils.E(err)
 	defer func() {
 		_ = res.Body.Close()
 	}()
@@ -87,7 +88,7 @@ func getNodeInfo() Node {
 	}
 
 	b, err := os.ReadFile(p)
-	E(err)
+	utils.E(err)
 
 	pkg := gson.New(b)
 
@@ -97,7 +98,7 @@ func getNodeInfo() Node {
 	}
 
 	c, err := semver.NewConstraint(required)
-	E(err)
+	utils.E(err)
 
 	for _, n := range getLocalNodeList() {
 		if c.Check(n.Ver) {
@@ -117,7 +118,7 @@ func getNodeInfo() Node {
 // recursively search for package.json
 func findPackageJSON() string {
 	d, err := os.Getwd()
-	E(err)
+	utils.E(err)
 
 	prev := ""
 

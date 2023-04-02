@@ -5,10 +5,13 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
+
+	"github.com/ysmood/use-node/pkg/node"
+	"github.com/ysmood/use-node/pkg/utils"
 )
 
 func main() {
-	nodePath := getNodePath()
+	nodePath := node.GetNodePath()
 	binPath := filepath.Join(nodePath, "bin")
 
 	const osPATH = "PATH"
@@ -16,7 +19,7 @@ func main() {
 	os.Setenv(osPATH, strings.Join([]string{binPath, os.Getenv(osPATH)}, string(os.PathListSeparator)))
 
 	bin, err := Shell()
-	E(err)
+	utils.E(err)
 
 	cmd := exec.Command(bin)
 	cmd.Stdin = os.Stdin

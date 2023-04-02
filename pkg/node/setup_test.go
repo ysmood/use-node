@@ -1,4 +1,4 @@
-package main
+package node
 
 import (
 	"github.com/Masterminds/semver/v3"

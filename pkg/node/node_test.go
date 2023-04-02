@@ -1,4 +1,4 @@
-package main
+package node
 
 import (
 	"net/http"
@@ -39,8 +39,8 @@ func TestGetVersion(t *testing.T) {
 func TestGetNode(t *testing.T) {
 	g := got.T(t)
 
-	getNodePath()
-	p := getNodePath()
+	GetNodePath()
+	p := GetNodePath()
 
 	g.Has(p, "use-node")
 }
