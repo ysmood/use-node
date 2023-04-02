@@ -2,6 +2,7 @@
 
 No need to setup anything, just run the `use-node`, then you can use the right node version under your shell.
 
+- Works the same across Windows, macOS, and Linux.
 - No options, no configs, just run `use-node` under your node project.
 - Auto-detect the standard [engines](https://docs.npmjs.com/cli/v9/configuring-npm/package-json#engines) config recursively from all parent folders.
 - Auto-choose the fastest registry to download node.
@@ -11,6 +12,8 @@ No need to setup anything, just run the `use-node`, then you can use the right n
 ## Installation
 
 Go to the [release page](https://github.com/ysmood/use-node/releases) to download the use-node binary to one of your PATH.
+
+If you have golang installed: `go install github.com/ysmood/use-node@latest`.
 
 ## How it works
 
