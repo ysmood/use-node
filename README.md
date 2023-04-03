@@ -1,5 +1,7 @@
 # Overview
 
+![usage](https://user-images.githubusercontent.com/1415488/229589650-c4112b86-f533-4205-a48f-44e88ebbc214.svg)
+
 No need to setup anything, just run the `use-node`, then you can use the right node version under your shell.
 
 - Works the same across Windows, macOS, and Linux.
@@ -21,6 +23,14 @@ When you run the `use-node`. It first recognize the `engines` field in `package.
 Then it spawns a sub-shell and inject the node path to your PATH, your current stdio will transparently pipe to the sub-shell.
 
 ## Use it outside node project
+
+If you want to use it without the `package.json` file, just specify the node version you want to:
+
+```bash
+use-node v19
+```
+
+## Shell Setup
 
 On unix like OS, add this line to your `.bashrc` or `.zshrc` files:
 

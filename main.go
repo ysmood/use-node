@@ -22,6 +22,7 @@ func main() {
 		p("Usage: use-node [node-version]")
 		p("")
 		p("  If the [node-version] is not specified, it will start a new shell with the version defined in the 'package.json'. If the version doesn't exist, it will be auto downloaded.")
+		p("  For more doc: https://github.com/ysmood/use-node")
 		p("")
 		p("Example:")
 		p("")

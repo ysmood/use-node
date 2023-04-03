@@ -1,6 +1,7 @@
 package node
 
 import (
+	"log"
 	"net/http"
 	"os"
 	"os/exec"
@@ -29,6 +30,7 @@ func GetNodePath(required string) string {
 	os.RemoveAll(nodePath)
 
 	fu := fetchup.New(nodePath, n.URLs()...)
+	fu.Logger = log.New(os.Stdout, "", 0)
 
 	utils.E(fu.Fetch())
 
