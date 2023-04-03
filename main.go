@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"regexp"
 	"strings"
 
 	"github.com/ysmood/use-node/pkg/node"
@@ -46,7 +47,7 @@ func main() {
 	}
 
 	os.Setenv(USE_NODE_SHELL, "true")
-	os.Setenv(PATH, strings.Join([]string{binPath, os.Getenv(PATH)}, string(os.PathListSeparator)))
+	os.Setenv(PATH, strings.Join([]string{binPath, getEnvWithoutOtherUseNode()}, string(os.PathListSeparator)))
 
 	bin, err := Shell()
 	utils.E(err)
@@ -64,4 +65,9 @@ func main() {
 
 func p(v ...interface{}) {
 	fmt.Println(v...)
+}
+
+func getEnvWithoutOtherUseNode() string {
+	reg := regexp.MustCompile(fmt.Sprintf(`[^%v]+use-node[^%v]+%v?`, os.PathListSeparator, os.PathListSeparator, os.PathListSeparator))
+	return reg.ReplaceAllString(os.Getenv(PATH), "")
 }
