@@ -25,7 +25,7 @@ Then it spawns a sub-shell and inject the node path to your PATH, your current s
 On unix like OS, add this line to your `.bashrc` or `.zshrc` files:
 
 ```bash
-export PATH=$PATH:$(use-node v19.8.1)
+export PATH=$PATH:$(use-node -p v19.8.1)
 ```
 
-On Windows, run `use-node v19.8.1`, copy the output then add it the [PATH config](https://www.java.com/en/download/help/path.html).
+On Windows, run `use-node -p v19.8.1`, copy the output then add it the [PATH config](https://www.java.com/en/download/help/path.html).

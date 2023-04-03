@@ -21,8 +21,7 @@ func main() {
 	flag.Usage = func() {
 		p("Usage: use-node [node-version]")
 		p("")
-		p("  If the [node-version] is specified it only prints the local node path for the specified version. If the version doesn't exist, it will be auto downloaded.")
-		p("  If the [node-version] is not specified, it will start a new shell with the version defined in the package.json .")
+		p("  If the [node-version] is not specified, it will start a new shell with the version defined in the 'package.json'. If the version doesn't exist, it will be auto downloaded.")
 		p("")
 		p("Example:")
 		p("")
@@ -30,19 +29,25 @@ func main() {
 		p("")
 		flag.PrintDefaults()
 	}
+
+	onlyPrint := flag.Bool("p", false, "Only print the node bin folder path outside use-node context")
+
 	flag.Parse()
 
 	ver := flag.Arg(0)
 
-	if _, has := os.LookupEnv(USE_NODE_SHELL); has {
-		return
-	}
-
 	nodePath := node.GetNodePath(ver)
 	binPath := node.BinPath(nodePath)
 
-	if ver != "" {
-		p(binPath)
+	if *onlyPrint {
+		if !isInUseNodeContext() {
+			p(binPath)
+		}
+		return
+	}
+
+	if isInUseNodeContext() {
+		p("Already in use-node context, please run exit before use-node again:", nodePath)
 		return
 	}
 
@@ -69,5 +74,26 @@ func p(v ...interface{}) {
 
 func getEnvWithoutOtherUseNode() string {
 	reg := regexp.MustCompile(fmt.Sprintf(`[^%v]+use-node[^%v]+%v?`, os.PathListSeparator, os.PathListSeparator, os.PathListSeparator))
-	return reg.ReplaceAllString(os.Getenv(PATH), "")
+	return reg.ReplaceAllString(cleanPath(), "")
+}
+
+func cleanPath() string {
+	list := strings.Split(os.Getenv(PATH), string(os.PathListSeparator))
+
+	m := map[string]struct{}{}
+
+	for _, i := range list {
+		m[i] = struct{}{}
+	}
+
+	list = []string{}
+	for i := range m {
+		list = append(list, i)
+	}
+	return strings.Join(list, string(os.PathListSeparator))
+}
+
+func isInUseNodeContext() bool {
+	_, has := os.LookupEnv(USE_NODE_SHELL)
+	return has
 }
