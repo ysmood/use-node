@@ -33,7 +33,7 @@ func TestGetPackageJSON(t *testing.T) {
 func TestGetVersion(t *testing.T) {
 	g := got.T(t)
 
-	validateVer(g, ">= v19.0.0", getNodeInfo().Ver)
+	validateVer(g, ">= v19.0.0", getNodeInfo("").Ver)
 }
 
 func TestGetNode(t *testing.T) {

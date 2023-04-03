@@ -3,7 +3,7 @@ module github.com/ysmood/use-node
 go 1.20
 
 require (
-	github.com/ysmood/fetchup v0.0.7
+	github.com/ysmood/fetchup v0.0.8
 	github.com/ysmood/got v0.33.0
 	github.com/ysmood/gson v0.7.3
 

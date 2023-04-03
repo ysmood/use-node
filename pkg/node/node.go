@@ -15,15 +15,10 @@ import (
 
 var cacheDir = filepath.Join(fetchup.CacheDir(), "use-node")
 
-func GetNodePath(ver string) string {
+func GetNodePath(required string) string {
 	utils.E(os.MkdirAll(cacheDir, 0755))
 
-	var n Node
-	if ver != "" {
-		n = newNode(ver)
-	} else {
-		n = getNodeInfo()
-	}
+	n := getNodeInfo(required)
 
 	nodePath := filepath.Join(cacheDir, n.Ver.Original())
 
@@ -90,20 +85,22 @@ func getRemoteNodeList() []Node {
 	return out
 }
 
-func getNodeInfo() Node {
-	p := findPackageJSON()
-	if p == "" {
-		panic("package.json not found")
-	}
-
-	b, err := os.ReadFile(p)
-	utils.E(err)
-
-	pkg := gson.New(b)
-
-	required := pkg.Get("engines.node").Str()
+func getNodeInfo(required string) Node {
 	if required == "" {
-		panic("node version not found in package.json")
+		p := findPackageJSON()
+		if p == "" {
+			panic("package.json not found")
+		}
+
+		b, err := os.ReadFile(p)
+		utils.E(err)
+
+		pkg := gson.New(b)
+
+		required = pkg.Get("engines.node").Str()
+		if required == "" {
+			panic("node version not found in package.json")
+		}
 	}
 
 	c, err := semver.NewConstraint(required)
