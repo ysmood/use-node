@@ -3,9 +3,12 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"regexp"
+	"sort"
 	"strings"
 
 	"github.com/ysmood/use-node/pkg/node"
@@ -32,8 +35,14 @@ func main() {
 	}
 
 	onlyPrint := flag.Bool("p", false, "Only print the node bin folder path outside use-node context")
+	install := flag.Bool("i", false, "Install the use-node binary to one of the folders in PATH")
 
 	flag.Parse()
+
+	if *install {
+		installSelfToPATH()
+		return
+	}
 
 	ver := flag.Arg(0)
 
@@ -79,7 +88,7 @@ func getEnvWithoutOtherUseNode() string {
 }
 
 func cleanPath() string {
-	list := strings.Split(os.Getenv(PATH), string(os.PathListSeparator))
+	list := getPathList()
 
 	m := map[string]struct{}{}
 
@@ -97,4 +106,50 @@ func cleanPath() string {
 func isInUseNodeContext() bool {
 	_, has := os.LookupEnv(USE_NODE_SHELL)
 	return has
+}
+
+func getPathList() []string {
+	return strings.Split(os.Getenv(PATH), string(os.PathListSeparator))
+}
+
+func installSelfToPATH() {
+	path, err := os.Executable()
+	utils.E(err)
+
+	list := getPathList()
+
+	for _, dir := range list {
+		to := filepath.Join(dir, "use-node")
+		if _, err := os.Stat(to); err == nil {
+			p("Already installed:", to)
+			return
+		}
+	}
+
+	sort.Slice(list, func(i, j int) bool {
+		return len(list[i]) < len(list[j])
+	})
+
+	for _, dir := range list {
+		to := filepath.Join(dir, "use-node")
+
+		f, err := os.Open(path)
+		utils.E(err)
+
+		info, err := f.Stat()
+		utils.E(err)
+
+		n, err := os.OpenFile(to, os.O_RDWR|os.O_CREATE|os.O_TRUNC, info.Mode())
+		if err != nil {
+			continue
+		}
+
+		_, err = io.Copy(n, f)
+		if err == nil {
+			p("Installed use-node to:", to)
+			return
+		}
+	}
+
+	panic("Failed to install use-node, no folder in PATH is writable")
 }
