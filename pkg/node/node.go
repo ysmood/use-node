@@ -70,7 +70,14 @@ func getLocalNodeList() []Node {
 }
 
 func getRemoteNodeList() []Node {
-	res, err := http.Get("https://nodejs.org/dist/index.json")
+	us := []string{}
+	for _, u := range famousRegistries {
+		us = append(us, u+"/index.json")
+	}
+	fu := fetchup.New("", us...)
+	fu.SpeedPacketSize = 3 * 1024
+
+	res, err := http.Get(fu.FastestURL())
 	utils.E(err)
 	defer func() {
 		_ = res.Body.Close()
