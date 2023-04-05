@@ -12,9 +12,9 @@ import (
 func TestGetNodeList(t *testing.T) {
 	g := got.T(t)
 
-	ver := getRemoteNodeList()[0].Ver
+	ver := getRemoteNodeList()[0]
 
-	validateVer(g, ">= v19.0.0", ver)
+	validateVer(g, ">= v19.0.0", ver.Ver())
 }
 
 func TestGetPackageJSON(t *testing.T) {
@@ -33,7 +33,7 @@ func TestGetPackageJSON(t *testing.T) {
 func TestGetVersion(t *testing.T) {
 	g := got.T(t)
 
-	validateVer(g, ">= v19.0.0", getNodeInfo("").Ver)
+	validateVer(g, ">= v19.0.0", getNodeInfo("").Ver())
 }
 
 func TestGetNode(t *testing.T) {
@@ -51,7 +51,7 @@ func TestRegistries(t *testing.T) {
 	const size = "39754090"
 
 	wg := sync.WaitGroup{}
-	for _, u := range newNode("v19.0.0").URLs() {
+	for _, u := range Node("v19.0.0").URLs() {
 		wg.Add(1)
 		u := u
 		go func() {

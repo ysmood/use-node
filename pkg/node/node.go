@@ -2,7 +2,6 @@ package node
 
 import (
 	"log"
-	"net/http"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -15,13 +14,14 @@ import (
 )
 
 var cacheDir = filepath.Join(fetchup.CacheDir(), "use-node")
+var versionsFile = filepath.Join(cacheDir, "versions.json")
 
 func GetNodePath(required string) string {
 	utils.E(os.MkdirAll(cacheDir, 0755))
 
 	n := getNodeInfo(required)
 
-	nodePath := filepath.Join(cacheDir, n.Ver.Original())
+	nodePath := filepath.Join(cacheDir, n.String())
 
 	if binExist(nodePath) {
 		return nodePath
@@ -39,17 +39,16 @@ func GetNodePath(required string) string {
 	return nodePath
 }
 
-type Node struct {
-	Ver *semver.Version
+type Node string
+
+func (n Node) Ver() *semver.Version {
+	v, err := semver.NewVersion(string(n))
+	utils.E(err)
+	return v
 }
 
-func newNode(version string) Node {
-	ver, err := semver.NewVersion(version)
-	utils.E(err)
-
-	return Node{
-		Ver: ver,
-	}
+func (n Node) String() string {
+	return string(n)
 }
 
 func getLocalNodeList() []Node {
@@ -63,7 +62,7 @@ func getLocalNodeList() []Node {
 			continue
 		}
 
-		out = append(out, newNode(d.Name()))
+		out = append(out, Node(d.Name()))
 	}
 
 	return out
@@ -74,21 +73,23 @@ func getRemoteNodeList() []Node {
 	for _, u := range famousRegistries {
 		us = append(us, u+"/index.json")
 	}
-	fu := fetchup.New("", us...)
+	fu := fetchup.New(versionsFile, us...)
 	fu.SpeedPacketSize = 3 * 1024
+	utils.E(fu.Fetch())
 
-	res, err := http.Get(fu.FastestURL())
+	return parseLocalNodeList()
+}
+
+func parseLocalNodeList() []Node {
+	b, err := os.ReadFile(versionsFile)
 	utils.E(err)
-	defer func() {
-		_ = res.Body.Close()
-	}()
 
-	list := gson.New(res.Body)
+	list := gson.New(b)
 
 	out := make([]Node, len(list.Arr()))
 
 	for i, it := range list.Arr() {
-		out[i] = newNode(it.Get("version").Str())
+		out[i] = Node(it.Get("version").Str())
 	}
 
 	return out
@@ -108,26 +109,30 @@ func getNodeInfo(required string) Node {
 
 		required = pkg.Get("engines.node").Str()
 		if required == "" {
-			panic("node version not found in package.json")
+			panic("Node version not found in package.json")
 		}
+	}
+
+	if required == "latest" {
+		return getRemoteNodeList()[0]
 	}
 
 	c, err := semver.NewConstraint(required)
 	utils.E(err)
 
 	for _, n := range getLocalNodeList() {
-		if c.Check(n.Ver) {
+		if c.Check(n.Ver()) {
 			return n
 		}
 	}
 
 	for _, n := range getRemoteNodeList() {
-		if c.Check(n.Ver) {
+		if c.Check(n.Ver()) {
 			return n
 		}
 	}
 
-	panic("no node version satisfies the requirement: " + required)
+	panic("No node version satisfies the requirement: " + required)
 }
 
 // recursively search for package.json

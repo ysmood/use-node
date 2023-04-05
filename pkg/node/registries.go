@@ -31,8 +31,8 @@ func (n Node) URLs() []string {
 		list = append(list, fmt.Sprintf(
 			"%s/%s/node-%s-%s-%s.%s",
 			r,
-			n.Ver.Original(),
-			n.Ver.Original(),
+			n.String(),
+			n.String(),
 			sys,
 			arch,
 			ext,

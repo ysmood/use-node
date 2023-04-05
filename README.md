@@ -9,6 +9,7 @@ No need to setup anything, just run the `use-node`, then you can use the right n
 - Auto-detect the standard [engines](https://docs.npmjs.com/cli/v9/configuring-npm/package-json#engines) config recursively from all parent folders.
 - Auto-choose the fastest registry to download node.
 - Auto-cache the node binary.
+- Lightweight and fast.
 - Reports every side-effect it makes on the system, such as where the node is installed.
 
 ## Installation
