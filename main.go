@@ -1,9 +1,11 @@
 package main
 
 import (
+	_ "embed"
 	"flag"
 	"fmt"
 	"io"
+	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -14,6 +16,9 @@ import (
 	"github.com/ysmood/use-node/pkg/node"
 	"github.com/ysmood/use-node/pkg/utils"
 )
+
+//go:embed use-node-cd.sh
+var shellCDHook string
 
 const (
 	PATH           = "PATH"
@@ -38,8 +43,14 @@ func main() {
 
 	onlyPrint := flag.Bool("p", false, "Only print the node bin folder path outside use-node context")
 	install := flag.Bool("i", false, "Install the use-node binary to one of the folders in PATH")
+	scriptCD := flag.Bool("s", false, "Print the shell script to replace cd with use-node command hook")
 
 	flag.Parse()
+
+	if *scriptCD {
+		p(shellCDHook)
+		return
+	}
 
 	if *install {
 		installSelfToPATH()
@@ -48,7 +59,13 @@ func main() {
 
 	ver := flag.Arg(0)
 
-	nodePath := node.GetNodePath(ver)
+	nodePath := ""
+	if *onlyPrint {
+		nodePath = node.GetNodePath(ver, nil)
+	} else {
+		nodePath = node.GetNodePath(ver, log.New(os.Stdout, "", 0))
+	}
+
 	binPath := node.BinPath(nodePath)
 
 	if *onlyPrint {

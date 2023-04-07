@@ -1,7 +1,6 @@
 package node
 
 import (
-	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -16,7 +15,7 @@ import (
 var cacheDir = filepath.Join(fetchup.CacheDir(), "use-node")
 var versionsFile = filepath.Join(cacheDir, "versions.json")
 
-func GetNodePath(required string) string {
+func GetNodePath(required string, logger fetchup.Logger) string {
 	utils.E(os.MkdirAll(cacheDir, 0755))
 
 	n := getNodeInfo(required)
@@ -30,7 +29,12 @@ func GetNodePath(required string) string {
 	os.RemoveAll(nodePath)
 
 	fu := fetchup.New(nodePath, n.URLs()...)
-	fu.Logger = log.New(os.Stdout, "", 0)
+
+	if logger == nil {
+		fu.Logger = fetchup.LoggerQuiet
+	} else {
+		fu.Logger = logger
+	}
 
 	utils.E(fu.Fetch())
 

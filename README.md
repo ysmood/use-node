@@ -36,6 +36,12 @@ On unix like OS, add this line to your `.bashrc` or `.zshrc` files:
 export PATH=$PATH:$(use-node -p v19.8.1)
 ```
 
+If you want to run `use-node` whenever you [cd](<https://en.wikipedia.org/wiki/Cd_(command)>) to a directory, add this line to your `.bashrc` or `.zshrc` files:
+
+```bash
+eval "$(use-node -s)"
+```
+
 On Windows, run `use-node -p v19.8.1`, copy the output directory path and add it to [PATH].
 
 ## How it works
