@@ -20,6 +20,18 @@ Go to the [release page](https://github.com/ysmood/use-node/releases) and downlo
 use-node -i
 ```
 
+On macOS you need to do this before you can run the `use-node` binary:
+
+```bash
+spctl --add --label "Approved" /path/to/use-node
+```
+
+If you have golang installed:
+
+```bash
+go install github.com/ysmood/use-node@latest
+```
+
 ## Use it outside node project
 
 If you want to use it without the `package.json` file, just specify the node version you want to:
