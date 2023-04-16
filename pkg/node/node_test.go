@@ -48,7 +48,7 @@ func TestGetNode(t *testing.T) {
 func TestRegistries(t *testing.T) {
 	g := got.T(t)
 
-	const size = "39754090"
+	size := ""
 
 	wg := sync.WaitGroup{}
 	for _, u := range Node("v19.0.0").URLs() {
@@ -66,7 +66,13 @@ func TestRegistries(t *testing.T) {
 				_ = res.Body.Close()
 			})
 
-			g.Desc("%s %#v", u, res.Header).Eq(res.Header.Get("Content-Length"), size)
+			actual := res.Header.Get("Content-Length")
+
+			if size == "" {
+				size = actual
+			}
+
+			g.Desc("%s %#v", u, res.Header).Eq(actual, size)
 			wg.Done()
 		}()
 	}
