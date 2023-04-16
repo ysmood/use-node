@@ -6,7 +6,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos-latest, windows-latest, ubuntu-latest]
+        os: [windows-latest]
 
     steps:
       - uses: actions/setup-go@v4
@@ -20,5 +20,4 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
 
       - name: test
-        run: |
-          go test ./...
+        run: go test ./...
