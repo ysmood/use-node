@@ -26,7 +26,7 @@ func GetNodePath(required string, logger fetchup.Logger) string {
 		return nodePath
 	}
 
-	os.RemoveAll(nodePath)
+	_ = os.RemoveAll(nodePath)
 
 	fu := fetchup.New(nodePath, n.URLs()...)
 

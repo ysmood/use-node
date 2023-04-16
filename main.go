@@ -80,8 +80,8 @@ func main() {
 		return
 	}
 
-	os.Setenv(USE_NODE_SHELL, "true")
-	os.Setenv(PATH, strings.Join([]string{binPath, getEnvWithoutOtherUseNode()}, string(os.PathListSeparator)))
+	utils.E(os.Setenv(USE_NODE_SHELL, "true"))
+	utils.E(os.Setenv(PATH, strings.Join([]string{binPath, getEnvWithoutOtherUseNode()}, string(os.PathListSeparator))))
 
 	bin, err := Shell()
 	utils.E(err)
