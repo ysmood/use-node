@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	_ "embed"
 	"flag"
 	"fmt"
@@ -61,9 +62,9 @@ func main() {
 
 	nodePath := ""
 	if *onlyPrint {
-		nodePath = node.GetNodePath(ver, nil)
+		nodePath = node.GetNodePath(context.Background(), ver, nil)
 	} else {
-		nodePath = node.GetNodePath(ver, log.New(os.Stdout, "", 0))
+		nodePath = node.GetNodePath(context.Background(), ver, log.New(os.Stdout, "", 0))
 	}
 
 	binPath := node.BinPath(nodePath)
