@@ -5,7 +5,7 @@ github.com/ysmood/fetchup v0.2.1/go.mod h1:94ROLWpn5fmCD4LPlcZ+LOE/iE/kRTU3kL+0u
 github.com/ysmood/gop v0.0.1 h1:EGxcy28xzMfjT+TlLf8JQd1w/sTz0XPrbHazLLs84BA=
 github.com/ysmood/gop v0.0.1/go.mod h1:JenWOSCGucsXYHdw1Cw4a0fmLnux7jXBDdlBGjh8V/g=
 github.com/ysmood/got v0.32.0/go.mod h1:pE1l4LOwOBhQg6A/8IAatkGp7uZjnalzrZolnlhhMgY=
-github.com/ysmood/got v0.33.2 h1:mz0PaCMzR//YBtDDkDf6z0O09SfotXBHzw3zLrrS2sw=
-github.com/ysmood/got v0.33.2/go.mod h1:P3C/Wwttv4uq/tpovaH+c8ANmHePyFPxEbNzdxcEGDU=
+github.com/ysmood/got v0.33.3 h1:TxjxcyeKHs/5n3HIybpB+idWt8Ro71NtIi3nDH81tRA=
+github.com/ysmood/got v0.33.3/go.mod h1:P3C/Wwttv4uq/tpovaH+c8ANmHePyFPxEbNzdxcEGDU=
 github.com/ysmood/gson v0.7.3 h1:QFkWbTH8MxyUTKPkVWAENJhxqdBa4lYTQWqZCiLG6kE=
 github.com/ysmood/gson v0.7.3/go.mod h1:3Kzs5zDl21g5F/BlLTNcuAGAYLKt2lV5G8D1zF3RNmg=

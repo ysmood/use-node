@@ -113,9 +113,10 @@ func getNodeInfo(required string) Node {
 
 		pkg := gson.New(b)
 
-		required = pkg.Get("engines.node").Str()
-		if required == "" {
-			panic("Node version not found in package.json")
+		if pkg.Has("engines.node") {
+			required = pkg.Get("engines.node").Str()
+		} else {
+			panic(`"engines.node" is not found in: ` + p + ", for details: https://docs.npmjs.com/cli/v9/configuring-npm/package-json#engines")
 		}
 	}
 

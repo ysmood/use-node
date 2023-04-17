@@ -2,7 +2,7 @@ package node
 
 import (
 	"net/http"
-	"os"
+	"path/filepath"
 	"sync"
 	"testing"
 
@@ -20,14 +20,29 @@ func TestGetNodeList(t *testing.T) {
 func TestGetPackageJSON(t *testing.T) {
 	g := got.T(t)
 
-	dir := "tmp/sub/path"
+	dir := filepath.FromSlash("tmp/sub/path")
 	g.MkdirAll(0755, dir)
 
-	g.E(os.Chdir(dir))
+	g.Chdir(dir)
 
 	p := findPackageJSON()
 
 	g.PathExists(p)
+}
+
+func TestEngineNodeNotExists(t *testing.T) {
+	g := got.T(t)
+
+	dir := filepath.FromSlash("tmp/engine-node-not-exists")
+
+	g.WriteFile(filepath.Join(dir, "package.json"), "{}")
+	g.Chdir(dir)
+
+	err := g.Panic(func() {
+		getNodeInfo("")
+	})
+
+	g.Has(err, `"engines.node" is not found`)
 }
 
 func TestGetVersion(t *testing.T) {
