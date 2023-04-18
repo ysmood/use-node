@@ -23,7 +23,7 @@ use-node -i
 On macOS you need to do this before you can run the `use-node` binary:
 
 ```bash
-spctl --add --label "Approved" /path/to/use-node
+xattr -r -d com.apple.quarantine /path/to/use-node
 ```
 
 If you have golang installed:
