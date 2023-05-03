@@ -20,7 +20,7 @@ Go to the [release page](https://github.com/ysmood/use-node/releases) and downlo
 use-node -i
 ```
 
-On macOS you need to do this before you can run the `use-node` binary:
+On macOS you might need to do below to trust the binary before run it:
 
 ```bash
 xattr -r -d com.apple.quarantine /path/to/use-node
