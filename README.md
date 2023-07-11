@@ -34,7 +34,7 @@ go install github.com/ysmood/use-node@latest
 
 ## Use it outside node project
 
-If you want to use it without the `package.json` file, just specify the node version you want to:
+If you want to use it without the `package.json` file, just specify the node version you want:
 
 ```bash
 use-node v19
@@ -42,7 +42,7 @@ use-node v19
 
 ## Shell Setup
 
-On unix like OS, add this line to your `.bashrc` or `.zshrc` files:
+If you want to let it setup PATH env on shell startup, on unix like OS add this line to your `.bashrc` or `.zshrc` files:
 
 ```bash
 export PATH=$PATH:$(use-node -p v19.8.1)
