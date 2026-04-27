@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/ysmood/got"
+	"github.com/ysmood/use-node/pkg/utils"
 )
 
 func TestGetNodeList(t *testing.T) {
@@ -25,7 +26,7 @@ func TestGetPackageJSON(t *testing.T) {
 
 	g.Chdir(dir)
 
-	p := findPackageJSON()
+	p := utils.FindPackageJSON()
 
 	g.PathExists(p)
 }

@@ -103,7 +103,7 @@ func parseLocalNodeList() []Node {
 
 func getNodeInfo(required string) Node {
 	if required == "" {
-		p := findPackageJSON()
+		p := utils.FindPackageJSON()
 		if p == "" {
 			panic("package.json not found")
 		}
@@ -140,26 +140,6 @@ func getNodeInfo(required string) Node {
 	}
 
 	panic("No node version satisfies the requirement: " + required)
-}
-
-// recursively search for package.json
-func findPackageJSON() string {
-	d, err := os.Getwd()
-	utils.E(err)
-
-	prev := ""
-
-	for d != prev {
-		p := filepath.Join(d, "package.json")
-		if _, err := os.Stat(p); err == nil {
-			return p
-		}
-
-		prev = d
-		d = filepath.Dir(d)
-	}
-
-	return ""
 }
 
 func BinPath(nodePath string) string {

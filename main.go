@@ -14,6 +14,8 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/ysmood/fetchup"
+	"github.com/ysmood/use-node/pkg/bun"
 	"github.com/ysmood/use-node/pkg/node"
 	"github.com/ysmood/use-node/pkg/utils"
 )
@@ -38,6 +40,7 @@ func main() {
 		p("  use-node latest")
 		p("  use-node v19.8.1")
 		p("  use-node v17")
+		p("  use-node --bun latest")
 		p("")
 		flag.PrintDefaults()
 	}
@@ -45,6 +48,7 @@ func main() {
 	onlyPrint := flag.Bool("p", false, "Only print the node bin folder path outside use-node context")
 	install := flag.Bool("i", false, "Install the use-node binary to one of the folders in PATH")
 	scriptCD := flag.Bool("s", false, "Print the shell script to replace cd with use-node command hook")
+	useBun := flag.Bool("bun", false, "Replace node with bun, use like 'use-node --bun latest' to use the latest bun version")
 
 	flag.Parse()
 
@@ -60,14 +64,19 @@ func main() {
 
 	ver := flag.Arg(0)
 
-	nodePath := ""
-	if *onlyPrint {
-		nodePath = node.GetNodePath(context.Background(), ver, nil)
-	} else {
-		nodePath = node.GetNodePath(context.Background(), ver, log.New(os.Stdout, "", 0))
+	var logger fetchup.Logger
+	if !*onlyPrint {
+		logger = log.New(os.Stdout, "", 0)
 	}
 
-	binPath := node.BinPath(nodePath)
+	var runtimePath, binPath string
+	if *useBun {
+		runtimePath = bun.GetBunPath(context.Background(), ver, logger)
+		binPath = bun.BinPath(runtimePath)
+	} else {
+		runtimePath = node.GetNodePath(context.Background(), ver, logger)
+		binPath = node.BinPath(runtimePath)
+	}
 
 	if *onlyPrint {
 		if !isInUseNodeContext() {
@@ -77,7 +86,7 @@ func main() {
 	}
 
 	if isInUseNodeContext() {
-		p("Already in use-node context, please run exit before use-node again:", nodePath)
+		p("Already in use-node context, please run exit before use-node again:", runtimePath)
 		return
 	}
 
@@ -87,7 +96,7 @@ func main() {
 	bin, err := Shell()
 	utils.E(err)
 
-	p("use-node:", nodePath)
+	p("use-node:", runtimePath)
 
 	cmd := exec.Command(bin)
 	cmd.Stdin = os.Stdin
