@@ -3,6 +3,8 @@ package bun
 import (
 	"fmt"
 	"runtime"
+
+	"github.com/ysmood/use-node/pkg/utils"
 )
 
 const releasesAPI = "https://api.github.com/repos/oven-sh/bun/releases?per_page=100"
@@ -20,7 +22,12 @@ func (b Bun) URLs() []string {
 		arch = "aarch64"
 	}
 
+	suffix := ""
+	if sys == "linux" && utils.IsMusl() {
+		suffix = "-musl"
+	}
+
 	return []string{
-		fmt.Sprintf("%s/bun-%s/bun-%s-%s.zip", downloadBase, b.String(), sys, arch),
+		fmt.Sprintf("%s/bun-%s/bun-%s-%s%s.zip", downloadBase, b.String(), sys, arch, suffix),
 	}
 }

@@ -76,7 +76,7 @@ func getLocalNodeList() []Node {
 
 func getRemoteNodeList() []Node {
 	us := []string{}
-	for _, u := range famousRegistries {
+	for _, u := range registries() {
 		us = append(us, u+"/index.json")
 	}
 	fu := fetchup.New(versionsFile, us...)
