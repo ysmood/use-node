@@ -1,10 +1,44 @@
 package utils
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"runtime"
 )
+
+const sentinelFile = ".use-node-ready"
+
+// CheckSentinel reports whether binPath exists and matches the size+mtime
+// fingerprint recorded by WriteSentinel in versionDir. A match means the
+// install pipeline ran to completion and the binary hasn't been truncated
+// or replaced since.
+func CheckSentinel(versionDir, binPath string) bool {
+	info, err := os.Stat(binPath)
+	if err != nil {
+		return false
+	}
+	data, err := os.ReadFile(filepath.Join(versionDir, sentinelFile))
+	if err != nil {
+		return false
+	}
+	var size, mtime int64
+	if _, err := fmt.Sscanf(string(data), "%d %d", &size, &mtime); err != nil {
+		return false
+	}
+	return size == info.Size() && mtime == info.ModTime().UnixNano()
+}
+
+// WriteSentinel records the size and mtime of binPath in a sentinel file
+// inside versionDir.
+func WriteSentinel(versionDir, binPath string) error {
+	info, err := os.Stat(binPath)
+	if err != nil {
+		return err
+	}
+	content := fmt.Sprintf("%d %d", info.Size(), info.ModTime().UnixNano())
+	return os.WriteFile(filepath.Join(versionDir, sentinelFile), []byte(content), 0644)
+}
 
 func E(err error) {
 	if err != nil {

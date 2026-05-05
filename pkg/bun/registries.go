@@ -7,7 +7,7 @@ import (
 	"github.com/ysmood/use-node/pkg/utils"
 )
 
-const releasesAPI = "https://api.github.com/repos/oven-sh/bun/releases?per_page=100"
+const releasesAPI = "https://api.github.com/repos/oven-sh/bun/releases"
 
 const downloadBase = "https://github.com/oven-sh/bun/releases/download"
 

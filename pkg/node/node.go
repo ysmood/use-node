@@ -42,7 +42,16 @@ func GetNodePath(ctx context.Context, required string, logger fetchup.Logger) st
 
 	utils.E(fetchup.StripFirstDir(nodePath))
 
+	utils.E(utils.WriteSentinel(nodePath, filepath.Join(BinPath(nodePath), nodeBinName())))
+
 	return nodePath
+}
+
+func nodeBinName() string {
+	if runtime.GOOS == "windows" {
+		return "node.exe"
+	}
+	return "node"
 }
 
 type Node string
@@ -151,6 +160,15 @@ func BinPath(nodePath string) string {
 }
 
 func binExist(p string) bool {
-	_, err := exec.Command(filepath.Join(BinPath(p), "node"), "-v").CombinedOutput()
-	return err == nil
+	bin := filepath.Join(BinPath(p), nodeBinName())
+	if utils.CheckSentinel(p, bin) {
+		return true
+	}
+	// Lazy migration for caches created before the sentinel existed:
+	// validate by execing once, then record the fingerprint.
+	if _, err := exec.Command(bin, "-v").CombinedOutput(); err != nil {
+		return false
+	}
+	_ = utils.WriteSentinel(p, bin)
+	return true
 }

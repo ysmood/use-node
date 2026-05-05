@@ -43,7 +43,16 @@ func GetBunPath(ctx context.Context, required string, logger fetchup.Logger) str
 
 	utils.E(fetchup.StripFirstDir(bunPath))
 
+	utils.E(utils.WriteSentinel(bunPath, filepath.Join(BinPath(bunPath), bunBinName())))
+
 	return bunPath
+}
+
+func bunBinName() string {
+	if runtime.GOOS == "windows" {
+		return "bun.exe"
+	}
+	return "bun"
 }
 
 type Bun string
@@ -145,10 +154,15 @@ func BinPath(bunPath string) string {
 }
 
 func binExist(p string) bool {
-	bin := "bun"
-	if runtime.GOOS == "windows" {
-		bin = "bun.exe"
+	bin := filepath.Join(BinPath(p), bunBinName())
+	if utils.CheckSentinel(p, bin) {
+		return true
 	}
-	_, err := exec.Command(filepath.Join(BinPath(p), bin), "-v").CombinedOutput()
-	return err == nil
+	// Lazy migration for caches created before the sentinel existed:
+	// validate by execing once, then record the fingerprint.
+	if _, err := exec.Command(bin, "-v").CombinedOutput(); err != nil {
+		return false
+	}
+	_ = utils.WriteSentinel(p, bin)
+	return true
 }
