@@ -40,6 +40,8 @@ If you want to use it without the `package.json` file, just specify the node ver
 use-node v19
 ```
 
+If you don't specify a version, it will use the latest node version by default.
+
 ## Shell Setup
 
 If you want to let it setup PATH env on shell startup, on unix like OS add this line to your `.bashrc` or `.zshrc` files:

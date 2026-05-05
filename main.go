@@ -33,7 +33,7 @@ func main() {
 	flag.Usage = func() {
 		p("Usage: use-node [node-version]")
 		p("")
-		p("  If the [node-version] is not specified, it will start a new shell with the version defined in the 'package.json'. If the version doesn't exist, it will be auto downloaded.")
+		p("  If the [node-version] is not specified, it will start a new shell with the version defined in the 'package.json'.")
 		p("  For more doc: https://github.com/ysmood/use-node")
 		p("")
 		p("Examples:")
@@ -71,13 +71,17 @@ func main() {
 	}
 
 	useBunRuntime := *useBun
-	if ver == "" && !useBunRuntime {
+	if ver == "" {
 		if p := utils.FindPackageJSON(); p != "" {
-			b, err := os.ReadFile(p)
-			utils.E(err)
-			if gson.New(b).Has("engines.bun") {
-				useBunRuntime = true
+			if !useBunRuntime {
+				b, err := os.ReadFile(p)
+				utils.E(err)
+				if gson.New(b).Has("engines.bun") {
+					useBunRuntime = true
+				}
 			}
+		} else {
+			ver = "latest"
 		}
 	}
 
