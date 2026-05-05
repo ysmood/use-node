@@ -2,6 +2,7 @@ package bun
 
 import (
 	"context"
+	"net/http"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -86,9 +87,25 @@ func getLocalBunList() []Bun {
 
 func getRemoteBunList() []Bun {
 	fu := fetchup.New(versionsFile, releasesAPI)
+
+	if token := os.Getenv("GITHUB_TOKEN"); token != "" {
+		base := fu.HttpClient.Transport
+		fu.HttpClient.Transport = authRoundTripper{base: base, token: token}
+	}
+
 	utils.E(fu.Fetch())
 
 	return parseLocalBunList()
+}
+
+type authRoundTripper struct {
+	base  http.RoundTripper
+	token string
+}
+
+func (a authRoundTripper) RoundTrip(req *http.Request) (*http.Response, error) {
+	req.Header.Set("Authorization", "Bearer "+a.token)
+	return a.base.RoundTrip(req)
 }
 
 func parseLocalBunList() []Bun {
