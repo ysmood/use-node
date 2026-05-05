@@ -15,6 +15,7 @@ import (
 	"strings"
 
 	"github.com/ysmood/fetchup"
+	"github.com/ysmood/gson"
 	"github.com/ysmood/use-node/pkg/bun"
 	"github.com/ysmood/use-node/pkg/node"
 	"github.com/ysmood/use-node/pkg/utils"
@@ -69,8 +70,19 @@ func main() {
 		logger = log.New(os.Stdout, "", 0)
 	}
 
+	useBunRuntime := *useBun
+	if ver == "" && !useBunRuntime {
+		if p := utils.FindPackageJSON(); p != "" {
+			b, err := os.ReadFile(p)
+			utils.E(err)
+			if gson.New(b).Has("engines.bun") {
+				useBunRuntime = true
+			}
+		}
+	}
+
 	var runtimePath, binPath string
-	if *useBun {
+	if useBunRuntime {
 		runtimePath = bun.GetBunPath(context.Background(), ver, logger)
 		binPath = bun.BinPath(runtimePath)
 	} else {

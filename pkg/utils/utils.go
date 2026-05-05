@@ -58,17 +58,23 @@ func IsMusl() bool {
 }
 
 // FindPackageJSON walks up from the current working directory looking for a package.json.
-// Returns "" if none is found before reaching the filesystem root.
+// The walk stops at the user's home directory (inclusive) to avoid stat'ing
+// directories above it, which are unlikely to host a project.
 func FindPackageJSON() string {
 	d, err := os.Getwd()
 	E(err)
 
+	home, _ := os.UserHomeDir()
 	prev := ""
 
 	for d != prev {
 		p := filepath.Join(d, "package.json")
 		if _, err := os.Stat(p); err == nil {
 			return p
+		}
+
+		if d == home {
+			return ""
 		}
 
 		prev = d
